@@ -192,7 +192,7 @@ st.markdown(
 
 st.link_button(
     "🌐 Acessar site da Passos Mágicos",
-    "COLOQUE_AQUI_O_LINK_DO_SITE",
+    "https://passosmagicos.org.br/",
     use_container_width=True
 )
 
@@ -223,7 +223,7 @@ with col1:
 
     st.link_button(
         "💻 Acessar Dashboard - Notebook / Desktop",
-        "COLOQUE_AQUI_O_LINK_POWER_BI",
+        "https://app.powerbi.com/view?r=eyJrIjoiZDY0NjkyZmQtY2RjYS00Mzg4LTgyN2UtMTVhZDgzYmJkMTYxIiwidCI6IjIwNDRhZjJlLTQyOWItNDBhMi04MzI2LTUyNmU1NDVjNGJlOSJ9",
         use_container_width=True
     )
 
