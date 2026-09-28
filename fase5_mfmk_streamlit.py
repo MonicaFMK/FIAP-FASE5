@@ -7,674 +7,231 @@ Original file is located at
     https://colab.research.google.com/drive/1NvDrQ0z7cHNVGI_pKTXmq4M-kERQYu5U
 """
 
-#!pip install streamlit
+!pip install streamlit
+
+#st.set_page_config(
+#    page_title="PASSOS MÁGICOS",
+#    layout="wide",
+#)
+
+#st.header("**PASSOS MÁGICOS**")
+
+#st.write('Nossa História')
+
+#st.write('A Associação Passos Mágicos tem uma trajetória de 33 anos de atuação, trabalhando na transformação da vida de crianças e jovens de baixa renda os levando a melhores oportunidades de vida.')
+
+#st.write('O que fazemos?')
+
+#st.write('Oferecemos um programa de educação de qualidade para crianças e jovens do município de Embu-Guaçu.')
+
+#st.write('Clique no botão para acessar o site')
+
+#st.write('Analise dos dados')
+
+#st.write('Para acessar pelo notebook/desktop, clique no botão abaixo.')
+
+#st.write('Para acessar pelo celular, clique no botão abaixo.')
 
 import streamlit as st
-import pandas as pd
-import joblib
+import base64
+from pathlib import Path
 
-## import requests
-## import tempfile
-## import os
-##
-## @st.cache_resource
-## def carregar_modelo():
-##     # URL do arquivo no GitHub
-##     file_url = "https://github.com/MonicaFMK/FIAP-Fase4/blob/main/modelo_arvore_obesidade.pkl?raw=true"
-##
-##     # Crie um arquivo temporário para salvar o modelo
-##     with tempfile.NamedTemporaryFile(delete=False, suffix='.pkl') as tmp_file:
-##         response = requests.get(file_url)
-##         response.raise_for_status() # Levanta um erro para códigos de status HTTP ruins
-##         tmp_file.write(response.content)
-##         tmp_file_path = tmp_file.name
-##
-##     try:
-##         artefatos = joblib.load(tmp_file_path)
-##     finally:
-##         # Limpa o arquivo temporário após o uso
-##         os.remove(tmp_file_path)
-##
-##     modelo = artefatos["modelo"]
-##     scaler = artefatos["scaler"]
-##     colunas_modelo = artefatos["colunas_modelo"]
-##     colunas_categoricas = artefatos["colunas_categoricas"]
-##
-##     return modelo, scaler, colunas_modelo, colunas_categoricas
-##
-##
-## modelo, scaler, colunas_modelo, colunas_categoricas = carregar_modelo()
 
-#dados = pd.read_csv('https://raw.githubusercontent.com/MonicaFMK/FIAP-Fase4/refs/heads/main/Obesity-formatado-LIMPO.csv')
+# ==========================================================
+# CONFIGURAÇÃO DA PÁGINA
+# ==========================================================
 
 st.set_page_config(
-    page_title="PASSOS MÁGICOS",
-    layout="wide",
+    page_title="Passos Mágicos",
+    page_icon="⭐",
+    layout="wide"
 )
 
-st.header("**PASSOS MÁGICOS**")
 
-#st.write('### Gênero')
-#input_genero = st.radio('Qual o gênero?', ['Feminino','Masculino'])
-#input_genero_dict = {'Feminino':'Female','Masculino':'Male'}
-#input_genero = input_genero_dict.get(input_genero)
+# ==========================================================
+# FUNDO + FORMATAÇÃO
+# ==========================================================
 
-st.write('Nossa História')
+def colocar_fundo(imagem):
 
-st.write('A Associação Passos Mágicos tem uma trajetória de 33 anos de atuação, trabalhando na transformação da vida de crianças e jovens de baixa renda os levando a melhores oportunidades de vida.')
+    with open(imagem, "rb") as arquivo:
+        imagem_base64 = base64.b64encode(
+            arquivo.read()
+        ).decode()
 
-st.write('O que fazemos?')
+    st.markdown(
+        f"""
+        <style>
 
-st.write('Oferecemos um programa de educação de qualidade para crianças e jovens do município de Embu-Guaçu.')
+        /* Fundo da página */
+        .stApp {{
+            background-image:
+                linear-gradient(
+                    rgba(255,255,255,0.80),
+                    rgba(255,255,255,0.80)
+                ),
+                url("data:image/png;base64,{imagem_base64}");
 
-st.write('Clique no botão para acessar o site')
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }}
 
-st.write('Analise dos dados')
+        /* Limitar largura do conteúdo */
+        .block-container {{
+            padding-top: 2rem;
+            padding-bottom: 3rem;
+            max-width: 1200px;
+        }}
 
-st.write('Para acessar pelo notebook/desktop, clique no botão abaixo.')
+        /* Título principal */
+        .titulo-principal {{
+            color: #1F5FAF;
+            font-size: 48px;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 30px;
+        }}
 
-st.write('Para acessar pelo celular, clique no botão abaixo.')
+        /* Títulos das seções */
+        .titulo-secao {{
+            color: #D32F2F;
+            font-size: 26px;
+            font-weight: 800;
+            margin-top: 25px;
+            margin-bottom: 10px;
+        }}
 
-#st.write('### Idade')
-#input_idade = float(st.slider('Selecione a idade',14,100))
+        /* Caixas dos textos */
+        .caixa {{
+            background-color: rgba(255,255,255,0.90);
+            padding: 22px 25px;
+            border-radius: 14px;
+            box-shadow: 0px 3px 12px rgba(0,0,0,0.15);
+            font-size: 18px;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }}
 
-st.write('### Altura')
-input_altura = float(st.number_input('Digite a altura e pressione ENTER para confirmar',0))
+        /* Botões */
+        .stLinkButton a {{
+            border-radius: 10px !important;
+            font-weight: 700 !important;
+        }}
 
-#st.write('### Peso')
-#input_peso = float(st.number_input('Digite o peso e pressione ENTER para confirmar',0))
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
 
-#st.write('### Histórico familiar')
-#input_historico_familiar = st.radio('Possui histórico familiar?', ['Sim','Não'])
-#input_historico_familiar_dict = {'Sim':'yes','Não':'no'}
-#input_historico_familiar = input_historico_familiar_dict.get(input_historico_familiar)
 
-#st.write('### Alimentos muito calóricos')
-#input_consumo_calorico = st.radio('Consumo frequente de alimentos muito calóricos?', ['Sim','Não'])
-#input_consumo_calorico_dict = {'Sim':'yes','Não':'no'}
-#input_consumo_calorico = input_consumo_calorico_dict.get(input_consumo_calorico)
+BASE_DIR = Path(__file__).parent
 
-#st.write('### Vegetais nas refeições')
-#input_consumo_vegetais = st.radio('Frequência de consumo de vegetais nas refeições', ['1 - raramente','2 - às vezes','3 - sempre'])
-#input_consumo_vegetais_dict = {'1 - raramente':1,'2 - às vezes':2,'3 - sempre':3}
-#input_consumo_vegetais = input_consumo_vegetais_dict.get(input_consumo_vegetais)
+colocar_fundo(BASE_DIR / "fundo_passos_magicos.png")
 
-#st.write('### Refeições')
-#input_refeicoes = st.radio('Número de refeições principais por dia', [1,2,3,4])
 
-#st.write('### Lanches')
-#input_Lanches = st.radio('Consumo de lanches/comes entre as refeições', ['não consome','às vezes','frequentemente','sempre'])
-#input_consumo_Lanches_dict = {'não consome':'no','às vezes':'Sometimes','frequentemente':'Frequently','sempre':'Always'}
-#input_consumo_Lanches = input_consumo_Lanches_dict.get(input_Lanches)
+# ==========================================================
+# TÍTULO
+# ==========================================================
 
-#st.write('### Cigarro')
-#input_Smoke = st.radio('Hábito de fumar?', ['Sim','Não'])
-#input_Smoke_dict = {'Sim':'yes','Não':'no'}
-#input_Smoke = input_Smoke_dict.get(input_Smoke)
+st.markdown(
+    '<div class="titulo-principal">⭐ PASSOS MÁGICOS ⭐</div>',
+    unsafe_allow_html=True
+)
 
-#st.write('### Água')
-#input_agua = st.radio('Consumo diário de água (L/dia).', [1,2,3])
 
-#st.write('### Ingestão calórica')
-#input_calorica = st.radio('Monitora a ingestão calórica diária?', ['Sim','Não'])
-#input_calorica_dict = {'Sim':'yes','Não':'no'}
-#input_calorica = input_calorica_dict.get(input_calorica)
+# ==========================================================
+# NOSSA HISTÓRIA
+# ==========================================================
 
-#st.write('### Atividade física')
-#input_atividade = st.radio('Frequência semanal de atividade física', ['nenhuma','1–2×/sem','3–4×/sem','5×/sem ou mais'])
-#input_atividade_dict = {'nenhuma':0,'1–2×/sem':1,'3–4×/sem':2,'5×/sem ou mais':3}
-#input_atividade = input_atividade_dict.get(input_atividade)
+st.markdown(
+    '<div class="titulo-secao">Nossa História</div>',
+    unsafe_allow_html=True
+)
 
-#st.write('### Eletrônicos')
-#input_tempo_eletronico = st.radio('Tempo diário usando dispositivos eletrônicos', ['0–2 h/dia','3–5 h/dia','> 5 h/dia'])
-#input_tempo_eletronico_dict = {'0–2 h/dia':0,'3–5 h/dia':1,'> 5 h/dia':2}
-#input_tempo_eletronico = input_tempo_eletronico_dict.get(input_tempo_eletronico)
+st.markdown(
+    """
+    <div class="caixa">
+    A Associação Passos Mágicos tem uma trajetória de 33 anos de atuação,
+    trabalhando na transformação da vida de crianças e jovens de baixa renda,
+    levando-os a melhores oportunidades de vida.
+    </div>
+    """,
+    unsafe_allow_html=True
+)
 
-#st.write('### Bebidas alcólicas')
-#input_Bebidas = st.radio('Consumo de bebida alcoólica', ['não bebe','às vezes','frequentemente','sempre'])
-#input_Bebidas_dict = {'não bebe':'no','às vezes':'Sometimes','frequentemente':'Frequently','sempre':'Always'}
-#input_Bebidas = input_Bebidas_dict.get(input_Bebidas)
 
-#st.write('### Meio de transporte')
-#input_transporte = st.radio('Meio de transporte habitual', ['carro','moto','bicicleta','transporte público','a pé'])
-#input_transporte_dict = {'carro':'Automobile','moto':'Motorbike','bicicleta':'Bike','transporte público':'Public_Transportation','a pé':'Walking'}
-#input_transporte = input_transporte_dict.get(input_transporte)
+# ==========================================================
+# O QUE FAZEMOS
+# ==========================================================
 
-#from numpy import test
-#novo_dado = pd.DataFrame(
-#    [{
-#        "Gender": input_genero,
-#        "Age": input_idade,
-#        "Height": input_altura,
-#        "Weight": input_peso,
-#        "family_history": input_historico_familiar,
-#        "FAVC": input_consumo_calorico,
-#        "FCVC": input_consumo_vegetais,
-#        "NCP": input_refeicoes,
-#        "CAEC": input_consumo_Lanches,
-#        "SMOKE": input_Smoke,
-#        "CH2O": input_agua,
-#        "SCC": input_calorica,
-#        "FAF": input_atividade,
-#        "TUE": input_tempo_eletronico,
-#        "CALC": input_Bebidas,
-#        "MTRANS": input_transporte
-#    }]
-#)
+st.markdown(
+    '<div class="titulo-secao">O que fazemos?</div>',
+    unsafe_allow_html=True
+)
 
-#st.write('### Tipo de Peso')
-#if st.button(" Verificar classificação do tipo de peso"):
-#
-#    # Converter as variáveis categóricas em colunas numéricas
-#    novo_dado_encoded = pd.get_dummies(
-#        novo_dado,
-#        columns=colunas_categoricas,
-#        dtype=int
-#    )
-#
-#    # Garantir as mesmas colunas e a mesma ordem usadas no treinamento
-#    novo_dado_encoded = novo_dado_encoded.reindex(
-#        columns=colunas_modelo,
-#        fill_value=0
-#    )
-#
-#    # Aplicar o mesmo StandardScaler usado no treinamento
-#    novo_dado_scaled = scaler.transform(novo_dado_encoded)
-#
-#    # Realizar a previsão
-#    previsao = modelo.predict(novo_dado_scaled)[0]
-#
-#    # Traduzir o resultado
-#    traducao_obesidade = {
-#        "Insufficient_Weight": "Peso insuficiente",
-#        "Normal_Weight": "Peso normal",
-#        "Overweight_Level_I": "Sobrepeso nível I",
-#        "Overweight_Level_II": "Sobrepeso nível II",
-#        "Obesity_Type_I": "Obesidade tipo I",
-#        "Obesity_Type_II": "Obesidade tipo II",
-#        "Obesity_Type_III": "Obesidade tipo III"
-#    }
-#
-#    resultado = traducao_obesidade.get(previsao, previsao)
-#
-#    st.success(
-#        f"Classificação prevista pelo modelo: **{resultado}**"
-#    )
-#
-#    with st.expander("Visualizar os dados enviados"):
-#        st.dataframe(novo_dado)
+st.markdown(
+    """
+    <div class="caixa">
+    Oferecemos um programa de educação de qualidade para crianças e jovens
+    do município de Embu-Guaçu.
+    </div>
+    """,
+    unsafe_allow_html=True
+)
 
-## Criar gráfico com a distribuição das classes da base
-#
-#st.write("### Distribuição dos tipos de peso na base de dados")
-#
-#agrupamento_peso = {
-#    "Insufficient_Weight": "Peso insuficiente",
-#    "Normal_Weight": "Peso normal",
-#    "Overweight_Level_I": "Sobrepeso",
-#    "Overweight_Level_II": "Sobrepeso",
-#    "Obesity_Type_I": "Obesidade",
-#    "Obesity_Type_II": "Obesidade",
-#    "Obesity_Type_III": "Obesidade"
-#}
-#
-#distribuicao_obesidade = (
-#    dados["Obesity"]
-#    .map(agrupamento_peso)
-#    .value_counts()
-#    .rename_axis("Tipo de peso")
-#    .reset_index(name="Quantidade")
-#)
 
-#st.bar_chart(
-#    distribuicao_obesidade,
-#    x="Tipo de peso",
-#    y="Quantidade"
-#)
+# ==========================================================
+# SITE DA PASSOS MÁGICOS
+# ==========================================================
 
-## Calcular percentual
-#total = distribuicao_obesidade["Quantidade"].sum()
-#
-#distribuicao_obesidade["Percentual"] = (
-#    distribuicao_obesidade["Quantidade"] / total * 100
-#)
-#
-## Mostrar legenda com percentuais
-#st.write("**Percentual por tipo de peso:**")
-#
-#for _, linha in distribuicao_obesidade.iterrows():
-#    st.write(
-#        f"• {linha['Tipo de peso']}: "
-#        f"{linha['Quantidade']} pessoas "
-#        f"({linha['Percentual']:.1f}%)"
-#    )
+st.markdown(
+    '<div class="titulo-secao">Conheça a Passos Mágicos</div>',
+    unsafe_allow_html=True
+)
 
-#st.write("### Tipos de peso em pessoas com histórico familiar")
-#
-## Tradução dos nomes das classes
-#traducao_obesidade = {
-#    "Insufficient_Weight": "Peso insuficiente",
-#    "Normal_Weight": "Peso normal",
-#    "Overweight_Level_I": "Sobrepeso",
-#    "Overweight_Level_II": "Sobrepeso",
-#    "Obesity_Type_I": "Obesidade",
-#    "Obesity_Type_II": "Obesidade",
-#    "Obesity_Type_III": "Obesidade"
-#}
-#
-## Filtrar apenas quem possui histórico familiar
-#dados_historico_sim = dados[
-#    dados["family_history"] == "yes"
-#].copy()
-#
-## Traduzir e contar os tipos de obesidade
-#grafico_historico = (
-#    dados_historico_sim["Obesity"]
-#    .map(traducao_obesidade)
-#    .value_counts()
-#    .rename_axis("Tipo de peso")
-#    .reset_index(name="Quantidade")
-#)
-#
-## Mostrar o gráfico
-#st.bar_chart(
-#    grafico_historico,
-#    x="Tipo de peso",
-#    y="Quantidade",
-#    use_container_width=True
-#)
+st.link_button(
+    "🌐 Acessar site da Passos Mágicos",
+    "COLOQUE_AQUI_O_LINK_DO_SITE",
+    use_container_width=True
+)
 
-#import pandas as pd
-#import altair as alt
-#
-#st.write("### Comparação dos tipos de peso por histórico familiar")
-#
-## Agrupar as classificações de peso
-#traducao_obesidade = {
-#    "Insufficient_Weight": "Peso insuficiente",
-#    "Normal_Weight": "Peso normal",
-#    "Overweight_Level_I": "Sobrepeso",
-#    "Overweight_Level_II": "Sobrepeso",
-#    "Obesity_Type_I": "Obesidade",
-#    "Obesity_Type_II": "Obesidade",
-#    "Obesity_Type_III": "Obesidade"
-#}
-#
-## Criar uma cópia da base para o gráfico
-#dados_historico = dados.copy()
-#
-## Criar uma nova coluna com os tipos de peso agrupados
-#dados_historico["Tipo de peso"] = (
-#    dados_historico["Obesity"]
-#    .map(traducao_obesidade)
-#)
-#
-## Traduzir histórico familiar
-#dados_historico["Histórico familiar"] = (
-#    dados_historico["family_history"]
-#    .map({
-#        "yes": "Sim",
-#        "no": "Não"
-#    })
-#)
-#
-## Contar quantas pessoas existem em cada grupo
-#comparacao_grafico = (
-#    dados_historico
-#    .groupby(
-#        ["Tipo de peso", "Histórico familiar"]
-#    )
-#    .size()
-#    .reset_index(name="Quantidade")
-#)
-#
-## Calcular percentual dentro de cada tipo de peso
-#comparacao_grafico["Percentual"] = (
-#    comparacao_grafico["Quantidade"]
-#    /
-#    comparacao_grafico
-#    .groupby("Tipo de peso")["Quantidade"]
-#    .transform("sum")
-#    * 100
-#)
-#
-## Criar texto que aparecerá sobre a barra
-#comparacao_grafico["Percentual_texto"] = (
-#    comparacao_grafico["Percentual"]
-#    .map(lambda x: f"{x:.1f}%")
-#)
-#
-## Criar as barras
-#barras = (
-#    alt.Chart(comparacao_grafico)
-#    .mark_bar(size=25)
-#    .encode(
-#        x=alt.X(
-#            "Tipo de peso:N",
-#            title="Tipo de peso",
-#            sort=[
-#                "Peso insuficiente",
-#                "Peso normal",
-#                "Sobrepeso",
-#                "Obesidade"
-#            ]
-#        ),
-#
-#        y=alt.Y(
-#            "Quantidade:Q",
-#            title="Quantidade"
-#        ),
-#
-#        color=alt.Color(
-#            "Histórico familiar:N",
-#            title="Histórico familiar"
-#        ),
-#
-#        xOffset="Histórico familiar:N",
-#
-#        tooltip=[
-#            alt.Tooltip(
-#                "Tipo de peso:N",
-#                title="Tipo de peso"
-#            ),
-#            alt.Tooltip(
-#                "Histórico familiar:N",
-#                title="Histórico familiar"
-#            ),
-#            alt.Tooltip(
-#                "Quantidade:Q",
-#                title="Quantidade"
-#            ),
-#            alt.Tooltip(
-#                "Percentual:Q",
-#                title="Percentual",
-#                format=".1f"
-#            )
-#        ]
-#    )
-#)
-#
-## Criar os percentuais acima das barras
-#percentuais = (
-#    alt.Chart(comparacao_grafico)
-#    .mark_text(
-#    dy=-8,
-#    fontSize=14,
-#    color="white",
-#    fontWeight="bold"
-#)
-#    .encode(
-#        x=alt.X(
-#            "Tipo de peso:N",
-#            sort=[
-#                "Peso insuficiente",
-#                "Peso normal",
-#                "Sobrepeso",
-#                "Obesidade"
-#            ]
-#        ),
-#
-#        y="Quantidade:Q",
-#
-#        xOffset="Histórico familiar:N",
-#
-#        text="Percentual_texto:N"
-#    )
-#)
-#
-## Juntar barras + percentuais
-#grafico = (
-#    barras + percentuais
-#).properties(
-#    height=400
-#)
-#
-## Exibir no Streamlit
-#st.altair_chart(
-#    grafico,
-#    use_container_width=True
-#)
 
-### Definição
-#
-#traducao_obesidade = {
-#    "Insufficient_Weight": "Peso insuficiente",
-#    "Normal_Weight": "Peso normal",
-#    "Overweight_Level_I": "Sobrepeso",
-#    "Overweight_Level_II": "Sobrepeso",
-#    "Obesity_Type_I": "Obesidade",
-#    "Obesity_Type_II": "Obesidade",
-#    "Obesity_Type_III": "Obesidade"
-#}
-#
-#dados_grafico = dados.copy()
-#
-#dados_grafico["Obesity"] = (
-#    dados_grafico["Obesity"]
-#    .map(traducao_obesidade)
-#)
+# ==========================================================
+# ANÁLISE DOS DADOS
+# ==========================================================
 
-#
-### Gráfico: Obesidade × alimentação
-#
-#st.write("## Tipo de peso e hábitos alimentares")
-#
-#aba1, aba2, aba3 = st.tabs([
-#    "Consumo calórico",
-#    "Refeições por dia",
-#    "Lanches"
-#])
+st.markdown(
+    '<div class="titulo-secao">Análise dos Dados</div>',
+    unsafe_allow_html=True
+)
 
-#
-### consumo de alimentos muito calóricos
-#
-#with aba1:
-#
-#    st.write(
-#        "### Consumo frequente de alimentos muito calóricos"
-#    )
-#
-#    grafico_favc = pd.crosstab(
-#        dados_grafico["Obesity"],
-#        dados_grafico["FAVC"],
-#        normalize="index"
-#    ) * 100
-#
-#    grafico_favc = grafico_favc.rename(
-#        columns={
-#            "yes": "Sim",
-#            "no": "Não"
-#        }
-#    )
-#
-#    st.bar_chart(
-#        grafico_favc,
-#        use_container_width=True
-#    )
+st.markdown(
+    """
+    <div class="caixa">
+    Explore os dashboards desenvolvidos para análise dos indicadores
+    educacionais da Passos Mágicos.
+    </div>
+    """,
+    unsafe_allow_html=True
+)
 
-### número de refeições por dia
-#
-#with aba2:
-#
-#    st.write(
-#        "### Número de refeições principais por dia"
-#    )
-#
-#    grafico_ncp = pd.crosstab(
-#        dados_grafico["Obesity"],
-#        dados_grafico["NCP"]
-#    )
-#
-#    grafico_ncp.columns = [
-#        f"{col} refeições"
-#        for col in grafico_ncp.columns
-#    ]
-#
-#    st.bar_chart(
-#        grafico_ncp,
-#        use_container_width=True
-#    )
 
-### lanches entre refeições
-#
-#with aba3:
-#
-#    st.write(
-#        "### Consumo de alimentos entre as refeições"
-#    )
-#
-#    grafico_caec = pd.crosstab(
-#        dados_grafico["Obesity"],
-#        dados_grafico["CAEC"]
-#    )
-#
-#    grafico_caec = grafico_caec.rename(
-#        columns={
-#            "no": "Não consome",
-#            "Sometimes": "Às vezes",
-#            "Frequently": "Frequentemente",
-#            "Always": "Sempre"
-#        }
-#    )
-#
-#    st.bar_chart(
-#        grafico_caec,
-#        use_container_width=True
-#    )
+col1, col2 = st.columns(2)
 
-### Obesidade × atividade física
-#
-#st.write("## Tipo de peso e atividade física")
-#
-#grafico_faf = pd.crosstab(
-#    dados_grafico["Obesity"],
-#    dados_grafico["FAF"]
-#)
-#
-#grafico_faf = grafico_faf.rename(
-#    columns={
-#        0: "Nenhuma",
-#        1: "1 a 2 vezes/semana",
-#        2: "3 a 4 vezes/semana",
-#        3: "5 ou mais vezes/semana"
-#    }
-#)
-#
-#st.bar_chart(
-#    grafico_faf,
-#    use_container_width=True
-#)
+with col1:
 
-### Obesidade × faixa etária
-#
-#dados_grafico["Faixa etária"] = pd.cut(
-#    dados_grafico["Age"],
-#    bins=[
-#        0,
-#        20,
-#        30,
-#        40,
-#        50,
-#        60,
-#        200
-#    ],
-#    labels=[
-#        "Até 20 anos",
-#        "21 a 30 anos",
-#        "31 a 40 anos",
-#        "41 a 50 anos",
-#        "51 a 60 anos",
-#        "Acima de 60 anos"
-#    ]
-#)
+    st.link_button(
+        "💻 Acessar Dashboard - Notebook / Desktop",
+        "COLOQUE_AQUI_O_LINK_POWER_BI",
+        use_container_width=True
+    )
 
-#st.write("## Tipo de peso por faixa etária")
-#
-#grafico_idade = pd.crosstab(
-#    dados_grafico["Obesity"],
-#    dados_grafico["Faixa etária"]
-#)
-#
-#st.bar_chart(
-#    grafico_idade,
-#    use_container_width=True
-#)
 
-#### Perfil combinado dos indivíduos
-#
-#st.write(
-#    "## Comparação do perfil de peso entre pessoas de 21 a 30 anos, "
-#    "com histórico familiar e sem atividade física"
-#)
-#
-## Filtrar somente o perfil desejado
-#perfil_peso = dados[
-#    (dados["Age"] >= 21) &
-#    (dados["Age"] <= 30) &
-#    (dados["family_history"] == "yes") &
-#    (dados["FAF"] == 0)
-#].copy()
-#
-## Agrupar os tipos de peso
-#agrupamento_peso = {
-#    "Insufficient_Weight": "Abaixo do peso",
-#    "Normal_Weight": "Peso normal",
-#    "Overweight_Level_I": "Sobrepeso",
-#    "Overweight_Level_II": "Sobrepeso",
-#    "Obesity_Type_I": "Obesidade",
-#    "Obesity_Type_II": "Obesidade",
-#    "Obesity_Type_III": "Obesidade"
-#}
-#
-## Criar a nova classificação agrupada
-#perfil_peso["Tipo de peso"] = (
-#    perfil_peso["Obesity"]
-#    .map(agrupamento_peso)
-#)
-#
-## Traduzir gênero
-#perfil_peso["Gênero"] = (
-#    perfil_peso["Gender"]
-#    .map({
-#        "Female": "Feminino",
-#        "Male": "Masculino"
-#    })
-#)
-#
-## Definir ordem dos tipos de peso
-#ordem_peso = [
-#    "Abaixo do peso",
-#    "Peso normal",
-#    "Sobrepeso",
-#    "Obesidade"
-#]
-#
-## Contar quantidade por tipo de peso e gênero
-#resultado_perfil = pd.crosstab(
-#    perfil_peso["Tipo de peso"],
-#    perfil_peso["Gênero"]
-#)
-#
-## Organizar a ordem das categorias
-#resultado_perfil = resultado_perfil.reindex(
-#    ordem_peso,
-#    fill_value=0
-#)
-#
-## Mostrar o gráfico
-#st.bar_chart(
-#    resultado_perfil,
-#    use_container_width=True
-#)
+with col2:
 
-#st.markdown(
-#    """
-#    ### Análise executiva
-#
-#    O perfil analisado concentra pessoas de 21 a 30 anos, independente do gênero,
-#    com histórico familiar de excesso de peso e sem atividade física, auxiliando
-#    na identificação de perfis que podem demandar maior atenção preventiva.
-#
-#    Os resultados são referentes ao estudo realizado na base disponível para análise.
-#    """
-#)
+    st.link_button(
+        "📱 Acessar Dashboard - Celular",
+        "COLOQUE_AQUI_O_LINK_POWER_BI_MOBILE",
+        use_container_width=True
+    )
