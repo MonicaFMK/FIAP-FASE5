@@ -9,29 +9,6 @@ Original file is located at
 
 #!pip install streamlit
 
-#st.set_page_config(
-#    page_title="PASSOS MÁGICOS",
-#    layout="wide",
-#)
-
-#st.header("**PASSOS MÁGICOS**")
-
-#st.write('Nossa História')
-
-#st.write('A Associação Passos Mágicos tem uma trajetória de 33 anos de atuação, trabalhando na transformação da vida de crianças e jovens de baixa renda os levando a melhores oportunidades de vida.')
-
-#st.write('O que fazemos?')
-
-#st.write('Oferecemos um programa de educação de qualidade para crianças e jovens do município de Embu-Guaçu.')
-
-#st.write('Clique no botão para acessar o site')
-
-#st.write('Analise dos dados')
-
-#st.write('Para acessar pelo notebook/desktop, clique no botão abaixo.')
-
-#st.write('Para acessar pelo celular, clique no botão abaixo.')
-
 import streamlit as st
 import base64
 from pathlib import Path
@@ -217,21 +194,9 @@ st.markdown(
 )
 
 
-col1, col2 = st.columns(2)
 
-with col1:
-
-    st.link_button(
-        "💻 Acessar Dashboard - Notebook / Desktop",
+st.link_button(
+        "💻 Acessar Dashboard",
         "https://app.powerbi.com/view?r=eyJrIjoiZDY0NjkyZmQtY2RjYS00Mzg4LTgyN2UtMTVhZDgzYmJkMTYxIiwidCI6IjIwNDRhZjJlLTQyOWItNDBhMi04MzI2LTUyNmU1NDVjNGJlOSJ9",
         use_container_width=True
-    )
-
-
-with col2:
-
-    st.link_button(
-        "📱 Acessar Dashboard - Celular",
-        "COLOQUE_AQUI_O_LINK_POWER_BI_MOBILE",
-        use_container_width=True
-    )
+)
