@@ -197,6 +197,6 @@ st.markdown(
 
 st.link_button(
         "💻 Acessar Dashboard",
-        "https://app.powerbi.com/view?r=eyJrIjoiZDY0NjkyZmQtY2RjYS00Mzg4LTgyN2UtMTVhZDgzYmJkMTYxIiwidCI6IjIwNDRhZjJlLTQyOWItNDBhMi04MzI2LTUyNmU1NDVjNGJlOSJ9",
+        "https://app.fabric.microsoft.com/view?r=eyJrIjoiNmVlOTMxYTItNzgwOC00ZTNiLWEwOGEtMzE2MmEyZjk3Y2JmIiwidCI6IjIwNDRhZjJlLTQyOWItNDBhMi04MzI2LTUyNmU1NDVjNGJlOSJ9",
         use_container_width=True
 )
