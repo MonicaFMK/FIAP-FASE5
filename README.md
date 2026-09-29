@@ -33,6 +33,12 @@ Aplicação desenvolvida em Streamlit para visualização dos dados.
 ### PassosMagicos.pbix
 Power Bi onde os dashboards foram desenvolvidos
 
+### Apresentação
+apresentacao_executiva_fiap_FASE5_PassosMagicos.pptx
+
+### Papel de parede
+fundo_passos_magicos.png
+
 ### FASE5_MFMK_LINKS.docx
 Links do projeto
 
